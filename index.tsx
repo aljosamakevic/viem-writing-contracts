@@ -13,7 +13,7 @@ import {
 } from 'viem'
 import 'viem/window'
 import { contract } from './contracts/simpleMessage'
-import { goerli } from 'viem/chains'
+// import { goerli } from 'viem/chains'
 // import { mint } from 'viem/chains'
 
 
@@ -39,7 +39,7 @@ const publicClient = createPublicClient({
 //   transport: http(),
 // })
 const walletClient = createWalletClient({
-  chain: goerli,
+  chain: stavanger,
   transport: custom(window.ethereum!),
 })
 
@@ -48,7 +48,6 @@ function Example() {
   const [hash, setHash] = useState<Hash>()
   const [receipt, setReceipt] = useState<TransactionReceipt>()
   const [message, setMessage] = useState<string>("Hello, World!")
-
 
   const connect = async () => {
     const [address] = await walletClient.requestAddresses()
@@ -65,6 +64,7 @@ function Example() {
     })
     const hash = await walletClient.writeContract(request)
     setHash(hash)
+
   }
 
   useEffect(() => {
@@ -85,7 +85,7 @@ function Example() {
         <button onClick={setMessageOnContract}>Set Message</button>
         {receipt && (
           <div>
-            Current message:{' '}
+            tx receipt:{' '}
             <pre>
               <div>{stringify(receipt, null)}</div>
             </pre>
