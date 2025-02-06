@@ -13,6 +13,7 @@ import {
 } from 'viem'
 import 'viem/window'
 import { contract } from './contracts/simpleMessage'
+import './styles.css'
 // import { goerli } from 'viem/chains'
 // import { mint } from 'viem/chains'
 
@@ -79,21 +80,38 @@ function Example() {
   if (account)
     return (
       <>
-        <div>Connected: {account}</div>
-        <input type="text"   onChange={(e) => setMessage(e.target.value)} 
-        />
-        <button onClick={setMessageOnContract}>Set Message</button>
-        {receipt && (
-          <div>
-            tx receipt:{' '}
-            <pre>
-              <div>{stringify(receipt, null)}</div>
-            </pre>
-          </div>
-        )}
+        <div className="container">
+          <div className="connected">Connected: {account}</div>
+          <input 
+            type="text" 
+            onChange={(e) => setMessage(e.target.value)} 
+            className="input"
+          />
+          <button 
+            onClick={setMessageOnContract} 
+            className="button"
+          >
+            Set Message
+          </button>
+          {receipt && (
+            <div className="receipt">
+              <div className="receipt-title">Transaction Receipt:</div>
+              <pre className="receipt-content">
+                <div>{stringify(receipt, null)}</div>
+              </pre>
+            </div>
+          )}
+        </div>
       </>
     )
-  return <button onClick={connect}>Connect Wallet</button>
+  return (
+    <button 
+      onClick={connect} 
+      className="button"
+    >
+      Connect Wallet
+    </button>
+  )
 }
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
