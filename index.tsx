@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import {
-  http,
+  // http,
   type Address,
   type Hash,
   type TransactionReceipt,
-  createPublicClient,
+  // createPublicClient,
   createWalletClient,
   custom,
   stringify,
-  defineChain,
+  // defineChain,
 } from 'viem'
 import 'viem/window'
 import { contract } from './contracts/simpleMessage'
@@ -18,31 +18,31 @@ import './styles.css'
 // import { mint } from 'viem/chains'
 
 
-export const stavanger = defineChain({
-  id: 50591822,
-  name: 'Stavanger',
-  nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
-  rpcUrls: {
-    default: { http: ['https://rpc.stavanger.gateway.fm'] },
-  },
-  blockExplorers: {
-    default: { name: 'Blockscout', url: 'https://explorer.stavanger.gateway.fm' },
-  },
+// export const stavanger = defineChain({
+//   id: 50591822,
+//   name: 'Stavanger',
+//   nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+//   rpcUrls: {
+//     default: { http: ['https://rpc.stavanger.gateway.fm'] },
+//   },
+//   blockExplorers: {
+//     default: { name: 'Blockscout', url: 'https://explorer.stavanger.gateway.fm' },
+//   },
   
-})
+// })
 
-const publicClient = createPublicClient({
-  chain: stavanger,
-  transport: http(),
-})
+// const publicClient = createPublicClient({
+//   chain: stavanger,
+//   transport: http(),
+// })
 // const publicClient = createPublicClient({
 //   chain: goerli,
 //   transport: http(),
 // })
-const walletClient = createWalletClient({
-  chain: stavanger,
-  transport: custom(window.ethereum!),
-})
+// const walletClient = createWalletClient({
+//   chain: stavanger,
+//   transport: custom(window.ethereum!),
+// })
 
 function Example() {
   const [account, setAccount] = useState<Address>()
@@ -50,30 +50,30 @@ function Example() {
   const [receipt, setReceipt] = useState<TransactionReceipt>()
   const [message, setMessage] = useState<string>("Hello, World!")
 
-  const connect = async () => {
-    const [address] = await walletClient.requestAddresses()
-    setAccount(address)
-  }
+  // const connect = async () => {
+  //   const [address] = await walletClient.requestAddresses()
+  //   setAccount(address)
+  // }
 
   const setMessageOnContract = async () => {
     if (!account) return
-    const { request } = await publicClient.simulateContract({
-      ...contract,
-      functionName: 'setMessage',
-      account,
-      args: [message],
-    })
-    const hash = await walletClient.writeContract(request)
-    setHash(hash)
+    // const { request } = await publicClient.simulateContract({
+    //   ...contract,
+    //   functionName: 'setMessage',
+    //   account,
+    //   args: [message],
+    // })
+    // const hash = await walletClient.writeContract(request)
+    // setHash(hash)
 
   }
 
   useEffect(() => {
-    ;(async () => {
-      if (hash) {
-        const receipt = await publicClient.waitForTransactionReceipt({ hash })
-        setReceipt(receipt)
-      }
+    (async () => {
+      // if (hash) {
+      //   const receipt = await publicClient.waitForTransactionReceipt({ hash })
+      //   setReceipt(receipt)
+      // }
     })()
   }, [hash])
 
@@ -106,7 +106,7 @@ function Example() {
     )
   return (
     <button 
-      onClick={connect} 
+      // onClick={connect} 
       className="button"
     >
       Connect Wallet
