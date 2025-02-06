@@ -9,35 +9,35 @@ import {
   createWalletClient,
   custom,
   stringify,
-  // defineChain,
+  defineChain,
 } from 'viem'
 import 'viem/window'
-import { contract } from './contract'
+import { contract } from './contracts/simpleMessage'
 import { goerli } from 'viem/chains'
 // import { mint } from 'viem/chains'
 
 
-// export const stavanger = defineChain({
-//   id: 50591822,
-//   name: 'Stavanger',
-//   nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
-//   rpcUrls: {
-//     default: { http: ['https://rpc.stavanger.gateway.fm'] },
-//   },
-//   blockExplorers: {
-//     default: { name: 'Blockscout', url: 'https://explorer.stavanger.gateway.fm' },
-//   },
+export const stavanger = defineChain({
+  id: 50591822,
+  name: 'Stavanger',
+  nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+  rpcUrls: {
+    default: { http: ['https://rpc.stavanger.gateway.fm'] },
+  },
+  blockExplorers: {
+    default: { name: 'Blockscout', url: 'https://explorer.stavanger.gateway.fm' },
+  },
   
-// })
+})
 
-// const publicClient = createPublicClient({
-//   chain: stavanger,
-//   transport: http(),
-// })
 const publicClient = createPublicClient({
-  chain: goerli,
+  chain: stavanger,
   transport: http(),
 })
+// const publicClient = createPublicClient({
+//   chain: goerli,
+//   transport: http(),
+// })
 const walletClient = createWalletClient({
   chain: goerli,
   transport: custom(window.ethereum!),
@@ -47,18 +47,21 @@ function Example() {
   const [account, setAccount] = useState<Address>()
   const [hash, setHash] = useState<Hash>()
   const [receipt, setReceipt] = useState<TransactionReceipt>()
+  const [message, setMessage] = useState<string>("Hello, World!")
+
 
   const connect = async () => {
     const [address] = await walletClient.requestAddresses()
     setAccount(address)
   }
 
-  const withdraw = async () => {
+  const setMessageOnContract = async () => {
     if (!account) return
     const { request } = await publicClient.simulateContract({
       ...contract,
-      functionName: 'withdraw',
+      functionName: 'setMessage',
       account,
+      args: [message],
     })
     const hash = await walletClient.writeContract(request)
     setHash(hash)
@@ -77,10 +80,12 @@ function Example() {
     return (
       <>
         <div>Connected: {account}</div>
-        <button onClick={withdraw}>Withdraw</button>
+        <input type="text"   onChange={(e) => setMessage(e.target.value)} 
+        />
+        <button onClick={setMessageOnContract}>Set Message</button>
         {receipt && (
           <div>
-            Withdraw:{' '}
+            Current message:{' '}
             <pre>
               <div>{stringify(receipt, null)}</div>
             </pre>
